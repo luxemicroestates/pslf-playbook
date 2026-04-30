@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="color-scheme" content="light only" />
+<meta name="supported-color-schemes" content="light" />
+<meta name="theme-color" content="#faf6ed" />
+<title>The PSLF Playbook — Mom's Loans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* FORCE LIGHT MODE — override iOS / Android dark mode */
+  :root {
+    color-scheme: light only;
+    --ink: #1a1a1a;
+    --ink-soft: #2d2d2d;
+    --paper: #faf6ed;
+    --paper-deep: #f0eadc;
+    --paper-light: #fdfaf3;
+    --accent: #c8421a;
+    --accent-bright: #e85a2a;
+    --accent-soft: #fce4d6;
+    --gold: #b8861f;
+    --green: #2d5d3a;
+    --green-bright: #4a8b5e;
+    --green-soft: #d9e8de;
+    --red: #8b1a1a;
+    --red-soft: #f5d9d9;
+    --rule: rgba(26, 26, 26, 0.15);
+    --rule-strong: rgba(26, 26, 26, 0.85);
+  }
+
+/* No dark mode override — keep light always */
+@media (prefers-color-scheme: dark) {
+:root {
+color-scheme: light only;
+}
+}
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+background: #faf6ed !important;
+color: #1a1a1a !important;
+font-family: ‘Fraunces’, serif;
+font-feature-settings: “ss01”, “ss02”;
+-webkit-font-smoothing: antialiased;
+line-height: 1.5;
+}
+
+body {
+background-color: #faf6ed !important;
+background-image:
+radial-gradient(circle at 15% 20%, rgba(200, 66, 26, 0.04) 0%, transparent 45%),
+radial-gradient(circle at 85% 75%, rgba(184, 134, 31, 0.04) 0%, transparent 45%);
+min-height: 100vh;
+}
+
+.grain {
+position: fixed;
+inset: 0;
+pointer-events: none;
+opacity: 0.35;
+mix-blend-mode: multiply;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 400 400’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.85’/%3E%3CfeColorMatrix values=‘0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’/%3E%3C/svg%3E”);
+z-index: 100;
+}
+
+.container {
+max-width: 920px;
+margin: 0 auto;
+padding: 56px 32px 96px;
+position: relative;
+z-index: 1;
+}
+
+/* ====== HEADER ====== */
+.header {
+border-bottom: 2px solid #1a1a1a;
+padding-bottom: 28px;
+margin-bottom: 44px;
+position: relative;
+}
+
+.meta-row {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.18em;
+color: rgba(26,26,26,0.6);
+margin-bottom: 22px;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+.doc-num {
+background: #1a1a1a;
+color: #faf6ed;
+padding: 4px 10px;
+letter-spacing: 0.12em;
+font-weight: 500;
+}
+
+h1 {
+font-family: ‘Fraunces’, serif;
+font-size: clamp(48px, 8vw, 84px);
+font-weight: 900;
+font-variation-settings: “opsz” 144;
+line-height: 0.9;
+letter-spacing: -0.035em;
+margin-bottom: 16px;
+color: #1a1a1a;
+}
+
+h1 .accent {
+color: #c8421a;
+font-style: italic;
+}
+
+.subtitle {
+font-size: 18px;
+font-style: italic;
+color: rgba(26,26,26,0.72);
+max-width: 580px;
+line-height: 1.45;
+}
+
+/* ====== PROGRESS RING ====== */
+.progress-section {
+background: #fdfaf3;
+border: 2px solid #1a1a1a;
+box-shadow: 6px 6px 0 #1a1a1a;
+padding: 36px;
+margin-bottom: 52px;
+display: grid;
+grid-template-columns: auto 1fr;
+gap: 36px;
+align-items: center;
+}
+
+.progress-ring-wrap {
+position: relative;
+width: 180px;
+height: 180px;
+flex-shrink: 0;
+}
+
+.progress-ring {
+transform: rotate(-90deg);
+width: 100%;
+height: 100%;
+}
+
+.progress-ring-bg {
+fill: none;
+stroke: #f0eadc;
+stroke-width: 14;
+}
+
+.progress-ring-fill {
+fill: none;
+stroke: #c8421a;
+stroke-width: 14;
+stroke-linecap: round;
+transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-center {
+position: absolute;
+inset: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+
+.progress-num {
+font-family: ‘Fraunces’, serif;
+font-size: 48px;
+font-weight: 900;
+line-height: 1;
+color: #1a1a1a;
+letter-spacing: -0.02em;
+}
+
+.progress-of {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+color: rgba(26,26,26,0.6);
+margin-top: 4px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+}
+
+.progress-info h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 26px;
+font-weight: 700;
+margin-bottom: 8px;
+color: #1a1a1a;
+letter-spacing: -0.015em;
+}
+
+.progress-info p {
+font-size: 15px;
+color: rgba(26,26,26,0.72);
+margin-bottom: 18px;
+line-height: 1.55;
+}
+
+.progress-controls {
+display: flex;
+gap: 8px;
+align-items: center;
+flex-wrap: wrap;
+}
+
+.progress-btn {
+background: #1a1a1a;
+color: #faf6ed;
+border: none;
+padding: 8px 16px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+}
+
+.progress-btn:hover { background: #c8421a; transform: translateY(-1px); }
+.progress-btn:active { transform: translateY(0); }
+
+.progress-btn.minus { background: #fdfaf3; color: #1a1a1a; border: 1.5px solid #1a1a1a; }
+.progress-btn.minus:hover { background: #f0eadc; color: #1a1a1a; }
+
+.progress-input {
+background: #fdfaf3;
+border: 1.5px solid #1a1a1a;
+padding: 8px 12px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 13px;
+width: 70px;
+text-align: center;
+color: #1a1a1a;
+border-radius: 2px;
+}
+
+.progress-meta {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+margin-top: 18px;
+padding-top: 18px;
+border-top: 1px solid rgba(26,26,26,0.15);
+}
+
+.pmeta-item {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+}
+
+.pmeta-label {
+color: rgba(26,26,26,0.55);
+text-transform: uppercase;
+letter-spacing: 0.15em;
+margin-bottom: 4px;
+font-weight: 500;
+}
+
+.pmeta-value {
+font-family: ‘Fraunces’, serif;
+font-size: 18px;
+font-weight: 600;
+color: #1a1a1a;
+letter-spacing: -0.01em;
+}
+
+.pmeta-value.green { color: #2d5d3a; }
+.pmeta-value.accent { color: #c8421a; }
+
+@media (max-width: 700px) {
+.progress-section {
+grid-template-columns: 1fr;
+text-align: center;
+padding: 28px 22px;
+}
+.progress-ring-wrap { margin: 0 auto; width: 160px; height: 160px; }
+.progress-controls { justify-content: center; }
+.progress-meta { text-align: left; }
+}
+
+/* ====== STATS HERO ====== */
+.stats {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+background: #1a1a1a;
+border: 2px solid #1a1a1a;
+margin-bottom: 52px;
+box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+.stat {
+background: #fdfaf3;
+padding: 24px 20px;
+transition: background 0.3s ease;
+}
+
+.stat:hover { background: #f0eadc; }
+
+.stat-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px;
+text-transform: uppercase;
+letter-spacing: 0.2em;
+color: rgba(26,26,26,0.6);
+margin-bottom: 10px;
+font-weight: 500;
+}
+
+.stat-value {
+font-family: ‘Fraunces’, serif;
+font-size: 36px;
+font-weight: 700;
+line-height: 1;
+letter-spacing: -0.025em;
+color: #1a1a1a;
+}
+
+.stat-value.green { color: #2d5d3a; }
+.stat-value.accent { color: #c8421a; }
+
+.stat-sub {
+font-size: 12px;
+color: rgba(26,26,26,0.6);
+margin-top: 8px;
+font-style: italic;
+}
+
+@media (max-width: 700px) {
+.stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ====== SECTION HEADERS ====== */
+.section {
+margin-bottom: 64px;
+}
+
+.section-num {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 12px;
+letter-spacing: 0.22em;
+color: #c8421a;
+margin-bottom: 10px;
+text-transform: uppercase;
+font-weight: 600;
+}
+
+h2 {
+font-family: ‘Fraunces’, serif;
+font-size: 40px;
+font-weight: 700;
+letter-spacing: -0.025em;
+line-height: 1;
+margin-bottom: 28px;
+padding-bottom: 16px;
+border-bottom: 1px solid rgba(26,26,26,0.15);
+color: #1a1a1a;
+}
+
+/* ====== APPLICATION ANSWERS BOX ====== */
+.app-answers {
+background: #fdfaf3;
+border: 2px solid #1a1a1a;
+padding: 36px;
+position: relative;
+overflow: hidden;
+box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+.app-answers::before {
+content: ‘STUDENTAID.GOV/IDR’;
+position: absolute;
+top: 16px;
+right: 20px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 9px;
+letter-spacing: 0.22em;
+color: rgba(26,26,26,0.4);
+font-weight: 500;
+}
+
+.app-answers h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 26px;
+font-weight: 700;
+margin-bottom: 8px;
+font-style: italic;
+color: #1a1a1a;
+}
+
+.app-answers .app-tagline {
+font-size: 13px;
+color: rgba(26,26,26,0.6);
+margin-bottom: 24px;
+font-family: ‘JetBrains Mono’, monospace;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+}
+
+.qa-row {
+display: grid;
+grid-template-columns: 1fr 1.4fr;
+gap: 20px;
+padding: 16px 0;
+border-bottom: 1px solid rgba(26,26,26,0.15);
+align-items: baseline;
+}
+
+.qa-row:last-child { border-bottom: none; padding-bottom: 4px; }
+
+.qa-q {
+font-size: 14px;
+color: rgba(26,26,26,0.65);
+font-family: ‘JetBrains Mono’, monospace;
+font-weight: 500;
+}
+
+.qa-a {
+font-size: 19px;
+font-weight: 600;
+font-family: ‘Fraunces’, serif;
+color: #1a1a1a;
+}
+
+.qa-a .highlight {
+background: #c8421a;
+color: #fdfaf3;
+padding: 2px 10px;
+margin: 0 -2px;
+font-weight: 700;
+border-radius: 2px;
+}
+
+.qa-a em {
+font-size: 14px;
+color: rgba(26,26,26,0.55);
+font-style: italic;
+font-weight: 400;
+}
+
+/* ====== PHASES TIMELINE — INTERACTIVE ====== */
+.phases-wrap {
+border: 2px solid #1a1a1a;
+background: #fdfaf3;
+padding: 8px 32px;
+box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+.phase {
+display: grid;
+grid-template-columns: 90px 1fr;
+gap: 28px;
+padding: 32px 0;
+border-bottom: 1px solid rgba(26,26,26,0.15);
+position: relative;
+}
+
+.phase:last-child { border-bottom: none; }
+
+.phase.complete {
+opacity: 0.55;
+}
+
+.phase.complete .phase-num {
+color: #2d5d3a;
+}
+
+.phase.complete h3 {
+text-decoration: line-through;
+text-decoration-color: rgba(45, 93, 58, 0.5);
+text-decoration-thickness: 2px;
+}
+
+.phase-marker {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+}
+
+.phase-num {
+font-family: ‘Fraunces’, serif;
+font-size: 64px;
+font-weight: 900;
+line-height: 0.85;
+color: #c8421a;
+font-style: italic;
+margin-bottom: 6px;
+transition: color 0.3s;
+}
+
+.phase-when {
+font-size: 10px;
+color: rgba(26,26,26,0.6);
+font-weight: 600;
+letter-spacing: 0.18em;
+}
+
+.phase-content h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 28px;
+font-weight: 700;
+margin-bottom: 8px;
+letter-spacing: -0.015em;
+color: #1a1a1a;
+}
+
+.phase-time {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+color: #c8421a;
+text-transform: uppercase;
+letter-spacing: 0.12em;
+margin-bottom: 18px;
+font-weight: 600;
+}
+
+.phase-toggle {
+margin-top: 16px;
+background: transparent;
+color: #c8421a;
+border: 1.5px solid #c8421a;
+padding: 8px 16px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+}
+
+.phase-toggle:hover { background: #c8421a; color: #fdfaf3; }
+.phase.complete .phase-toggle { background: #2d5d3a; color: #fdfaf3; border-color: #2d5d3a; }
+.phase.complete .phase-toggle:hover { background: #fdfaf3; color: #2d5d3a; }
+
+.step-list {
+list-style: none;
+counter-reset: step;
+}
+
+.step-list li {
+counter-increment: step;
+position: relative;
+padding-left: 42px;
+padding-bottom: 14px;
+font-size: 16px;
+line-height: 1.55;
+color: #2d2d2d;
+cursor: pointer;
+transition: opacity 0.2s;
+}
+
+.step-list li:last-child { padding-bottom: 0; }
+
+.step-list li::before {
+content: counter(step);
+position: absolute;
+left: 0;
+top: -2px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+background: #1a1a1a;
+color: #fdfaf3;
+border: 1px solid #1a1a1a;
+width: 28px;
+height: 28px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+font-weight: 700;
+transition: all 0.2s;
+}
+
+.step-list li.checked {
+opacity: 0.5;
+text-decoration: line-through;
+text-decoration-color: rgba(45, 93, 58, 0.5);
+}
+
+.step-list li.checked::before {
+background: #2d5d3a;
+border-color: #2d5d3a;
+content: ‘✓’;
+}
+
+.step-list code {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 13px;
+background: #fce4d6;
+color: #c8421a;
+padding: 2px 8px;
+border-radius: 2px;
+font-weight: 600;
+}
+
+.step-list strong {
+color: #1a1a1a;
+font-weight: 700;
+}
+
+/* ====== COMPARISON TABLE ====== */
+.comparison {
+border: 2px solid #1a1a1a;
+overflow: hidden;
+background: #fdfaf3;
+box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+.comp-header {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+background: #1a1a1a;
+color: #fdfaf3;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px;
+text-transform: uppercase;
+letter-spacing: 0.18em;
+font-weight: 600;
+}
+
+.comp-header > div {
+padding: 14px 16px;
+}
+
+.comp-row {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+border-bottom: 1px solid rgba(26,26,26,0.15);
+align-items: center;
+transition: background 0.2s;
+}
+
+.comp-row:last-child { border-bottom: none; }
+
+.comp-row > div {
+padding: 18px 16px;
+font-size: 15px;
+color: #1a1a1a;
+}
+
+.comp-row.winner {
+background: #d9e8de;
+position: relative;
+}
+
+.comp-row.winner::before {
+content: ‘★’;
+position: absolute;
+left: 6px;
+top: 50%;
+transform: translateY(-50%);
+color: #2d5d3a;
+font-size: 16px;
+}
+
+.comp-row.winner > div:first-child {
+padding-left: 26px;
+}
+
+.comp-strategy {
+font-weight: 600;
+}
+
+.comp-row.winner .comp-strategy { color: #2d5d3a; font-weight: 700; }
+
+.comp-num {
+font-family: ‘JetBrains Mono’, monospace;
+font-weight: 500;
+}
+
+/* Loan facts table variant */
+.facts-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0;
+border: 2px solid #1a1a1a;
+background: #fdfaf3;
+box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+.fact {
+padding: 18px 22px;
+border-right: 1px solid rgba(26,26,26,0.15);
+border-bottom: 1px solid rgba(26,26,26,0.15);
+}
+
+.fact:nth-child(2n) { border-right: none; }
+.fact:nth-last-child(-n+2) { border-bottom: none; }
+
+.fact-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px;
+text-transform: uppercase;
+letter-spacing: 0.18em;
+color: rgba(26,26,26,0.55);
+margin-bottom: 6px;
+font-weight: 500;
+}
+
+.fact-value {
+font-family: ‘Fraunces’, serif;
+font-size: 19px;
+font-weight: 600;
+color: #1a1a1a;
+letter-spacing: -0.01em;
+}
+
+@media (max-width: 600px) {
+.facts-grid { grid-template-columns: 1fr; }
+.fact { border-right: none; }
+.fact:nth-last-child(2) { border-bottom: 1px solid rgba(26,26,26,0.15); }
+}
+
+/* ====== WARNINGS BOX ====== */
+.warnings {
+background: #f5d9d9;
+border: 2px solid #8b1a1a;
+padding: 32px 36px;
+position: relative;
+box-shadow: 6px 6px 0 #8b1a1a;
+}
+
+.warnings h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 26px;
+font-weight: 700;
+margin-bottom: 22px;
+color: #8b1a1a;
+font-style: italic;
+}
+
+.warning-list {
+list-style: none;
+}
+
+.warning-list li {
+padding: 12px 0 12px 32px;
+position: relative;
+font-size: 15px;
+border-bottom: 1px dashed rgba(139, 26, 26, 0.25);
+color: #2d2d2d;
+line-height: 1.5;
+}
+
+.warning-list li:last-child { border-bottom: none; padding-bottom: 4px; }
+
+.warning-list li::before {
+content: ‘✕’;
+position: absolute;
+left: 0;
+top: 12px;
+color: #8b1a1a;
+font-weight: 700;
+font-size: 16px;
+}
+
+.warning-list li strong {
+color: #8b1a1a;
+font-weight: 700;
+}
+
+/* ====== CHECKLIST ====== */
+.checklist {
+border: 2px solid #1a1a1a;
+padding: 32px 36px;
+background: #fdfaf3;
+box-shadow: 6px 6px 0 #1a1a1a;
+position: relative;
+}
+
+.checklist h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 26px;
+font-weight: 700;
+margin-bottom: 8px;
+color: #1a1a1a;
+}
+
+.checklist .stamp {
+display: inline-block;
+transform: rotate(-3deg);
+background: #c8421a;
+color: #fdfaf3;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+padding: 5px 12px;
+letter-spacing: 0.18em;
+margin-bottom: 22px;
+font-weight: 600;
+box-shadow: 2px 2px 0 #1a1a1a;
+}
+
+.check-item {
+display: flex;
+align-items: flex-start;
+gap: 16px;
+padding: 14px 0;
+border-bottom: 1px solid rgba(26,26,26,0.15);
+font-size: 15px;
+color: #2d2d2d;
+line-height: 1.5;
+cursor: pointer;
+transition: opacity 0.2s;
+}
+
+.check-item:last-child { border-bottom: none; padding-bottom: 4px; }
+
+.check-item.checked {
+opacity: 0.5;
+}
+
+.check-item.checked .check-text {
+text-decoration: line-through;
+text-decoration-color: rgba(45, 93, 58, 0.5);
+}
+
+.check-box {
+width: 24px;
+height: 24px;
+border: 2px solid #1a1a1a;
+flex-shrink: 0;
+margin-top: 1px;
+background: #fdfaf3;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 14px;
+font-weight: 700;
+color: transparent;
+}
+
+.check-item.checked .check-box {
+background: #2d5d3a;
+border-color: #2d5d3a;
+color: #fdfaf3;
+}
+
+.check-item:hover .check-box {
+background: #fce4d6;
+}
+
+.check-item.checked:hover .check-box {
+background: #2d5d3a;
+}
+
+.check-item strong {
+color: #1a1a1a;
+font-weight: 700;
+}
+
+/* ====== KEY DEADLINES ====== */
+.deadline-card {
+background: #c8421a;
+color: #fdfaf3;
+padding: 28px 32px;
+margin: 36px 0;
+position: relative;
+overflow: hidden;
+box-shadow: 6px 6px 0 #1a1a1a;
+border: 2px solid #1a1a1a;
+}
+
+.deadline-card.passed {
+background: #2d5d3a;
+}
+
+.deadline-card::after {
+content: ‘’;
+position: absolute;
+right: -50px;
+top: -50px;
+width: 180px;
+height: 180px;
+border: 2px solid rgba(250,246,237,0.18);
+border-radius: 50%;
+}
+
+.deadline-card::before {
+content: ‘’;
+position: absolute;
+right: -20px;
+bottom: -30px;
+width: 100px;
+height: 100px;
+border: 2px solid rgba(250,246,237,0.12);
+border-radius: 50%;
+}
+
+.deadline-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+letter-spacing: 0.22em;
+text-transform: uppercase;
+opacity: 0.95;
+margin-bottom: 8px;
+font-weight: 600;
+color: #fff;
+}
+
+.deadline-date {
+font-family: ‘Fraunces’, serif;
+font-size: 48px;
+font-weight: 900;
+font-style: italic;
+line-height: 1;
+margin-bottom: 12px;
+letter-spacing: -0.02em;
+color: #fff;
+}
+
+.deadline-desc {
+font-size: 16px;
+max-width: 540px;
+position: relative;
+z-index: 1;
+line-height: 1.55;
+color: #fff;
+}
+
+.deadline-desc strong {
+background: rgba(255,255,255,0.22);
+padding: 1px 8px;
+border-radius: 2px;
+font-weight: 700;
+}
+
+.deadline-countdown {
+margin-top: 14px;
+padding-top: 14px;
+border-top: 1px solid rgba(255,255,255,0.2);
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 12px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: #fff;
+font-weight: 600;
+position: relative;
+z-index: 1;
+}
+
+/* ====== NOTES SECTION ====== */
+.notes-section {
+background: #fdfaf3;
+border: 2px solid #1a1a1a;
+box-shadow: 6px 6px 0 #1a1a1a;
+padding: 32px 36px;
+}
+
+.notes-section h3 {
+font-family: ‘Fraunces’, serif;
+font-size: 26px;
+font-weight: 700;
+margin-bottom: 8px;
+color: #1a1a1a;
+}
+
+.notes-section .notes-tagline {
+font-size: 13px;
+color: rgba(26,26,26,0.6);
+margin-bottom: 18px;
+font-family: ‘JetBrains Mono’, monospace;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+}
+
+.notes-textarea {
+width: 100%;
+min-height: 140px;
+background: #faf6ed;
+border: 1.5px solid rgba(26,26,26,0.3);
+padding: 16px;
+font-family: ‘Fraunces’, serif;
+font-size: 15px;
+color: #1a1a1a;
+line-height: 1.5;
+border-radius: 2px;
+resize: vertical;
+}
+
+.notes-textarea:focus {
+outline: none;
+border-color: #c8421a;
+}
+
+.notes-status {
+margin-top: 10px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+color: rgba(26,26,26,0.55);
+text-transform: uppercase;
+letter-spacing: 0.12em;
+}
+
+.notes-status.saved { color: #2d5d3a; }
+
+/* ====== RESET BUTTON ====== */
+.reset-section {
+text-align: center;
+margin-top: 48px;
+}
+
+.reset-btn {
+background: transparent;
+color: rgba(26,26,26,0.5);
+border: 1px solid rgba(26,26,26,0.25);
+padding: 8px 18px;
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.2s;
+}
+
+.reset-btn:hover { color: #8b1a1a; border-color: #8b1a1a; }
+
+/* ====== FOOTER ====== */
+.footer {
+margin-top: 48px;
+padding-top: 24px;
+border-top: 1px solid rgba(26,26,26,0.15);
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+color: rgba(26,26,26,0.55);
+text-align: center;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+line-height: 1.7;
+}
+
+/* tiny mobile tweaks */
+@media (max-width: 600px) {
+.container { padding: 32px 18px 64px; }
+.qa-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 0; }
+.qa-q { font-size: 11px; }
+.qa-a { font-size: 17px; }
+.comp-header, .comp-row { grid-template-columns: 1.5fr 0.85fr 0.85fr 0.85fr; }
+.comp-row > div, .comp-header > div { padding: 12px 8px; font-size: 12px; }
+.phase { grid-template-columns: 60px 1fr; gap: 14px; padding: 24px 0; }
+.phase-num { font-size: 44px; }
+.phases-wrap { padding: 4px 20px; }
+.stat-value { font-size: 26px; }
+.app-answers, .checklist, .warnings, .notes-section, .progress-section { padding: 24px 20px; }
+.deadline-card { padding: 22px 24px; }
+.deadline-date { font-size: 38px; }
+h2 { font-size: 32px; }
+.app-answers h3, .checklist h3, .warnings h3, .notes-section h3, .progress-info h3 { font-size: 22px; }
+.step-list li { padding-left: 38px; }
+.progress-num { font-size: 38px; }
+}
+
+@media print {
+.grain { display: none; }
+body { background: white !important; }
+.progress-controls, .phase-toggle, .reset-section, .notes-textarea { display: none; }
+}
+</style>
+
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+
+  <header class="header">
+    <div class="meta-row">
+      <span class="doc-num">DOC · PSLF–001</span>
+      <span>For Linyen Carmenatti · Living Document</span>
+    </div>
+    <h1>The <span class="accent">PSLF</span><br/>Playbook.</h1>
+    <p class="subtitle">A complete action plan for converting $137K of Parent PLUS debt into ~$155K of tax-free forgiveness. Built around mom's 20+ years of public-service teaching.</p>
+  </header>
+
+  <!-- PROGRESS RING — INTERACTIVE -->
+
+  <section class="progress-section">
+    <div class="progress-ring-wrap">
+      <svg class="progress-ring" viewBox="0 0 200 200">
+        <circle class="progress-ring-bg" cx="100" cy="100" r="84"></circle>
+        <circle class="progress-ring-fill" cx="100" cy="100" r="84"
+                stroke-dasharray="527.79" stroke-dashoffset="527.79" id="progressFill"></circle>
+      </svg>
+      <div class="progress-center">
+        <div class="progress-num" id="progressNum">37</div>
+        <div class="progress-of">of 120 paid</div>
+      </div>
+    </div>
+    <div class="progress-info">
+      <h3>Qualifying Payments</h3>
+      <p>Update this number as MOHELA processes new ECFs and IDR adjustments. Tap to reflect the current count from her StudentAid.gov dashboard.</p>
+      <div class="progress-controls">
+        <button class="progress-btn minus" onclick="changeCount(-1)">−</button>
+        <input type="number" class="progress-input" id="countInput" value="37" min="0" max="120" onchange="setCount(this.value)" />
+        <button class="progress-btn" onclick="changeCount(1)">+</button>
+      </div>
+      <div class="progress-meta">
+        <div class="pmeta-item">
+          <div class="pmeta-label">Remaining</div>
+          <div class="pmeta-value accent" id="remaining">83</div>
+        </div>
+        <div class="pmeta-item">
+          <div class="pmeta-label">Est. Forgiveness</div>
+          <div class="pmeta-value green" id="forgivenessDate">Mar 2033</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY STATS -->
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">New Payment</div>
+      <div class="stat-value green">$556</div>
+      <div class="stat-sub">/month on New IBR</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Forgiven Tax-Free</div>
+      <div class="stat-value accent">~$155K</div>
+      <div class="stat-sub">after 120 payments</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Time Left</div>
+      <div class="stat-value" id="timeLeft">6.9 yrs</div>
+      <div class="stat-sub" id="paymentsLeft">83 more payments</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total Cost</div>
+      <div class="stat-value">~$46K</div>
+      <div class="stat-sub">vs. $159K aggressive</div>
+    </div>
+  </div>
+
+  <!-- DEADLINE -->
+
+  <div class="deadline-card" id="deadlineCard">
+    <div class="deadline-label">⚠ Hard Deadline</div>
+    <div class="deadline-date">May 8, 2026</div>
+    <div class="deadline-desc">Recertify the IDR plan before this date or her payment jumps to <strong>$1,376/mo</strong> and the <strong>$18,632</strong> of accrued interest capitalizes onto the principal — permanently.</div>
+    <div class="deadline-countdown" id="countdown">Calculating...</div>
+  </div>
+
+  <!-- LOAN FACTS -->
+
+  <section class="section">
+    <div class="section-num">§ 01 — The Situation</div>
+    <h2>Loan Facts.</h2>
+    <div class="facts-grid">
+      <div class="fact">
+        <div class="fact-label">Borrower</div>
+        <div class="fact-value">Mom (Parent PLUS)</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Servicer</div>
+        <div class="fact-value">MOHELA</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Total Balance</div>
+        <div class="fact-value">$137,266.67</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Interest Rate</div>
+        <div class="fact-value">6.75%</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Current Plan</div>
+        <div class="fact-value">ICR · $1,207/mo</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Loan Type</div>
+        <div class="fact-value">Direct Consolidation</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">PSLF Count</div>
+        <div class="fact-value" id="factCount">37 of 120</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Last ECF Filed</div>
+        <div class="fact-value">Nov 8, 2023</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Mom's AGI</div>
+        <div class="fact-value">$114,917</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Family Size</div>
+        <div class="fact-value">4 people</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Employer</div>
+        <div class="fact-value">SBCUSD</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Status</div>
+        <div class="fact-value">Active full-time</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRATEGY COMPARISON -->
+
+  <section class="section">
+    <div class="section-num">§ 02 — Why PSLF wins</div>
+    <h2>Strategy Math.</h2>
+    <div class="comparison">
+      <div class="comp-header">
+        <div>Strategy</div>
+        <div>Monthly</div>
+        <div>Total Paid</div>
+        <div>Forgiven</div>
+      </div>
+      <div class="comp-row winner">
+        <div class="comp-strategy">New IBR + PSLF</div>
+        <div class="comp-num">$556</div>
+        <div class="comp-num">$46K</div>
+        <div class="comp-num">$155K</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-strategy">Stay on ICR + PSLF</div>
+        <div class="comp-num">$1,207</div>
+        <div class="comp-num">$100K</div>
+        <div class="comp-num">$91K</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-strategy">Standard 10-year</div>
+        <div class="comp-num">$1,376</div>
+        <div class="comp-num">$190K</div>
+        <div class="comp-num">$0</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-strategy">Aggressive Payoff $2.5K</div>
+        <div class="comp-num">$2,500</div>
+        <div class="comp-num">$165K</div>
+        <div class="comp-num">$0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDR APPLICATION ANSWERS -->
+
+  <section class="section">
+    <div class="section-num">§ 03 — The application cheat sheet</div>
+    <h2>The Application.</h2>
+
+```
+<div class="app-answers">
+  <h3>IDR Application — Field-by-Field</h3>
+  <div class="app-tagline">Reference while filling out the form</div>
+
+  <div class="qa-row">
+    <div class="qa-q">› Whose login?</div>
+    <div class="qa-a">Mom's FSA ID</div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› What to do?</div>
+    <div class="qa-a">Switch to a different IDR plan</div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Which plan?</div>
+    <div class="qa-a"><span class="highlight">Income-Based Repayment (IBR)</span></div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Filing status</div>
+    <div class="qa-a">Whatever 2025 1040 shows</div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Income source</div>
+    <div class="qa-a">Use IRS Data Retrieval</div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› AGI</div>
+    <div class="qa-a"><span class="highlight">$114,917</span></div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Family size</div>
+    <div class="qa-a"><span class="highlight">4</span> &nbsp;<em>(mom + dad + grandma + brother)</em></div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Spouse income</div>
+    <div class="qa-a">$0 <em>(dad has no income)</em></div>
+  </div>
+  <div class="qa-row">
+    <div class="qa-q">› Spouse fed loans?</div>
+    <div class="qa-a">No</div>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- THE 4 PHASES -->
+
+  <section class="section">
+    <div class="section-num">§ 04 — Execution timeline · tap steps to check off</div>
+    <h2>The Four Phases.</h2>
+
+```
+<div class="phases-wrap">
+  <div class="phase" data-phase="1">
+    <div class="phase-marker">
+      <div class="phase-num">01</div>
+      <div class="phase-when">TONIGHT</div>
+    </div>
+    <div class="phase-content">
+      <h3>Submit IDR Application</h3>
+      <div class="phase-time">⏱ 30–45 min · before May 8</div>
+      <ol class="step-list">
+        <li>Sit with mom — she has to log in</li>
+        <li>Go to <code>StudentAid.gov/idr</code></li>
+        <li>Click <strong>Log In to Start</strong></li>
+        <li>Choose <strong>"Switch to a different IDR plan"</strong></li>
+        <li>Select <strong>Income-Based Repayment (IBR)</strong></li>
+        <li>Use the answers from § 03 above</li>
+        <li>If system blocks IBR → recertify ICR first, switch later</li>
+        <li>Sign electronically and <strong>save the confirmation as PDF</strong></li>
+      </ol>
+      <button class="phase-toggle" onclick="togglePhase(1)">Mark Phase Complete</button>
+    </div>
+  </div>
+
+  <div class="phase" data-phase="2">
+    <div class="phase-marker">
+      <div class="phase-num">02</div>
+      <div class="phase-when">THIS WEEK</div>
+    </div>
+    <div class="phase-content">
+      <h3>File PSLF Employer Certification</h3>
+      <div class="phase-time">⏱ 20 min · covers Nov 2023 → today</div>
+      <ol class="step-list">
+        <li>Go to <code>StudentAid.gov/pslf</code> → <strong>PSLF Help Tool</strong></li>
+        <li>Search employer: <strong>San Bernardino City Unified School District</strong></li>
+        <li>Confirm "Likely a qualifying employer" badge</li>
+        <li>Employment dates: <strong>Nov 8, 2023 → today</strong></li>
+        <li>Enter principal's name, title, email, phone</li>
+        <li>Sign electronically; principal will get an email to sign</li>
+        <li>Text the principal a heads-up to expect it</li>
+        <li>MOHELA processes in 4–12 weeks; count will update</li>
+      </ol>
+      <button class="phase-toggle" onclick="togglePhase(2)">Mark Phase Complete</button>
+    </div>
+  </div>
+
+  <div class="phase" data-phase="3">
+    <div class="phase-marker">
+      <div class="phase-num">03</div>
+      <div class="phase-when">NEXT 30–90 DAYS</div>
+    </div>
+    <div class="phase-content">
+      <h3>Monitor & Verify</h3>
+      <div class="phase-time">⏱ 5 min/week · check both dashboards</div>
+      <ol class="step-list">
+        <li>Watch for plan to flip from <strong>ICR → IBR</strong></li>
+        <li>Confirm new monthly payment shows <strong>~$556/mo</strong></li>
+        <li>Verify auto-pay is set to the new amount (not $1,376)</li>
+        <li>Watch the qualifying payment count — expect a jump from IDR adjustment</li>
+        <li><strong>RED FLAG:</strong> if it shows <code>Standard Plan</code> or past-due — call MOHELA at <strong>1-888-866-4352</strong></li>
+      </ol>
+      <button class="phase-toggle" onclick="togglePhase(3)">Mark Phase Complete</button>
+    </div>
+  </div>
+
+  <div class="phase" data-phase="4">
+    <div class="phase-marker">
+      <div class="phase-num">04</div>
+      <div class="phase-when">LATE 2027</div>
+    </div>
+    <div class="phase-content">
+      <h3>PSLF Buyback (Future Move)</h3>
+      <div class="phase-time">⏱ Strategic · don't do this now</div>
+      <ol class="step-list">
+        <li>Wait until ALL 120 employment months are certified</li>
+        <li>Identify the SAVE forbearance gap months</li>
+        <li>Submit PSLF Buyback request at <code>StudentAid.gov/pslf</code></li>
+        <li>Pay one-time fee (~$556 × number of bought-back months)</li>
+        <li>Could shave 12–18 months off the timeline</li>
+      </ol>
+      <button class="phase-toggle" onclick="togglePhase(4)">Mark Phase Complete</button>
+    </div>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- WARNINGS -->
+
+  <section class="section">
+    <div class="section-num">§ 05 — Don't blow it up</div>
+    <h2>Critical Don'ts.</h2>
+    <div class="warnings">
+      <h3>Things that will destroy this strategy</h3>
+      <ul class="warning-list">
+        <li><strong>Don't consolidate again.</strong> Resets the PSLF count to zero.</li>
+        <li><strong>Don't pay extra.</strong> Every dollar over $556 is a dollar that would've been forgiven.</li>
+        <li><strong>Don't take any new federal loans</strong> in mom's name after July 1, 2026 — locks all her loans into Standard repayment forever.</li>
+        <li><strong>Don't miss the May 8 deadline.</strong> Capitalizes $18,632 of interest permanently.</li>
+        <li><strong>Don't refinance privately.</strong> Kills PSLF eligibility instantly.</li>
+        <li><strong>Don't leave SBCUSD</strong> unless going to another qualifying public-service employer.</li>
+        <li><strong>Don't skip annual recertification.</strong> Set a reminder for April 1, 2027.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TONIGHT CHECKLIST -->
+
+  <section class="section">
+    <div class="section-num">§ 06 — Pre-flight</div>
+    <h2>Tonight's Checklist.</h2>
+    <div class="checklist">
+      <h3>Before you click "Log In to Start"</h3>
+      <div class="stamp">USE BEFORE FILING</div>
+      <div class="check-item" data-check="1">
+        <div class="check-box">✓</div>
+        <div class="check-text">Mom is sitting with you (or you have her FSA ID credentials)</div>
+      </div>
+      <div class="check-item" data-check="2">
+        <div class="check-box">✓</div>
+        <div class="check-text">2025 Form 1040 open — confirm filing status (top of form) and AGI (<strong>$114,917 on Line 11</strong>)</div>
+      </div>
+      <div class="check-item" data-check="3">
+        <div class="check-box">✓</div>
+        <div class="check-text">Phone within reach for 2FA / verification codes</div>
+      </div>
+      <div class="check-item" data-check="4">
+        <div class="check-box">✓</div>
+        <div class="check-text">Family size confirmed: <strong>4 people</strong> (or 3 if brother is mostly self-supporting)</div>
+      </div>
+      <div class="check-item" data-check="5">
+        <div class="check-box">✓</div>
+        <div class="check-text">30–45 minutes of uninterrupted time</div>
+      </div>
+      <div class="check-item" data-check="6">
+        <div class="check-box">✓</div>
+        <div class="check-text">Principal's email + cell ready (for tomorrow's PSLF form)</div>
+      </div>
+      <div class="check-item" data-check="7">
+        <div class="check-box">✓</div>
+        <div class="check-text">This document open on your phone for reference</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+
+  <section class="section">
+    <div class="section-num">§ 07 — Track changes over time</div>
+    <h2>Notes & Updates.</h2>
+    <div class="notes-section">
+      <h3>Running Log</h3>
+      <div class="notes-tagline">Auto-saves to this device · use for confirmation numbers, dates filed, MOHELA conversations</div>
+      <textarea class="notes-textarea" id="notesArea" placeholder="Apr 29, 2026 — Submitted IDR application, switched to IBR. Confirmation #: ________&#10;&#10;May 5, 2026 — Filed PSLF ECF for Nov 2023 → Apr 2026. Principal signed same day.&#10;&#10;Use this space to log everything..."></textarea>
+      <div class="notes-status" id="notesStatus">Ready</div>
+    </div>
+  </section>
+
+  <!-- RESET -->
+
+  <div class="reset-section">
+    <button class="reset-btn" onclick="resetAll()">Reset All Progress</button>
+  </div>
+
+  <footer class="footer">
+    Prepared April 29, 2026 · Living document · Updates auto-saved locally<br/>
+    Re-run analysis annually before April 1 recertification
+  </footer>
+
+</div>
+
+<script>
+  // ====== STATE & PERSISTENCE ======
+  const STORAGE_KEY = 'pslf_playbook_state_v1';
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn('Could not save state:', e);
+    }
+  }
+
+  let state = loadState() || {
+    count: 37,
+    phasesComplete: {},
+    stepsChecked: {},
+    checklistItems: {},
+    notes: ''
+  };
+
+  // ====== PROGRESS RING ======
+  const RING_CIRCUMFERENCE = 2 * Math.PI * 84; // r=84
+
+  function updateProgress() {
+    const count = parseInt(state.count) || 0;
+    const clamped = Math.max(0, Math.min(120, count));
+    const percent = clamped / 120;
+    const offset = RING_CIRCUMFERENCE * (1 - percent);
+
+    document.getElementById('progressFill').style.strokeDashoffset = offset;
+    document.getElementById('progressNum').textContent = clamped;
+    document.getElementById('countInput').value = clamped;
+    document.getElementById('factCount').textContent = `${clamped} of 120`;
+
+    const remaining = 120 - clamped;
+    document.getElementById('remaining').textContent = remaining;
+
+    const yearsLeft = (remaining / 12).toFixed(1);
+    document.getElementById('timeLeft').textContent = `${yearsLeft} yrs`;
+    document.getElementById('paymentsLeft').textContent = `${remaining} more payments`;
+
+    // Estimated forgiveness date
+    const now = new Date();
+    const future = new Date(now.getFullYear(), now.getMonth() + remaining, now.getDate());
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('forgivenessDate').textContent =
+      remaining === 0 ? 'NOW!' : `${monthNames[future.getMonth()]} ${future.getFullYear()}`;
+  }
+
+  function changeCount(delta) {
+    state.count = Math.max(0, Math.min(120, (parseInt(state.count) || 0) + delta));
+    updateProgress();
+    saveState(state);
+  }
+
+  function setCount(val) {
+    state.count = Math.max(0, Math.min(120, parseInt(val) || 0));
+    updateProgress();
+    saveState(state);
+  }
+
+  // ====== PHASE TOGGLES ======
+  function togglePhase(num) {
+    state.phasesComplete[num] = !state.phasesComplete[num];
+    applyPhaseStates();
+    saveState(state);
+  }
+
+  function applyPhaseStates() {
+    document.querySelectorAll('.phase').forEach(el => {
+      const num = el.dataset.phase;
+      const btn = el.querySelector('.phase-toggle');
+      if (state.phasesComplete[num]) {
+        el.classList.add('complete');
+        btn.textContent = '✓ Phase Complete · Tap to Undo';
+      } else {
+        el.classList.remove('complete');
+        btn.textContent = 'Mark Phase Complete';
+      }
+    });
+  }
+
+  // ====== STEP CHECKLIST ======
+  function setupStepClicks() {
+    document.querySelectorAll('.phase').forEach(phaseEl => {
+      const phaseNum = phaseEl.dataset.phase;
+      phaseEl.querySelectorAll('.step-list li').forEach((li, idx) => {
+        const key = `${phaseNum}-${idx}`;
+        if (state.stepsChecked[key]) li.classList.add('checked');
+        li.addEventListener('click', (e) => {
+          e.stopPropagation();
+          li.classList.toggle('checked');
+          state.stepsChecked[key] = li.classList.contains('checked');
+          saveState(state);
+        });
+      });
+    });
+  }
+
+  // ====== TONIGHT CHECKLIST ======
+  function setupChecklistClicks() {
+    document.querySelectorAll('.check-item').forEach(item => {
+      const key = item.dataset.check;
+      if (state.checklistItems[key]) item.classList.add('checked');
+      item.addEventListener('click', () => {
+        item.classList.toggle('checked');
+        state.checklistItems[key] = item.classList.contains('checked');
+        saveState(state);
+      });
+    });
+  }
+
+  // ====== NOTES ======
+  let notesTimer;
+  function setupNotes() {
+    const textarea = document.getElementById('notesArea');
+    const status = document.getElementById('notesStatus');
+    textarea.value = state.notes || '';
+
+    textarea.addEventListener('input', () => {
+      status.textContent = 'Saving...';
+      status.classList.remove('saved');
+      clearTimeout(notesTimer);
+      notesTimer = setTimeout(() => {
+        state.notes = textarea.value;
+        saveState(state);
+        const now = new Date();
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        status.textContent = `Saved at ${time}`;
+        status.classList.add('saved');
+      }, 600);
+    });
+  }
+
+  // ====== COUNTDOWN TO MAY 8 ======
+  function updateCountdown() {
+    const deadline = new Date('2026-05-08T23:59:59');
+    const now = new Date();
+    const diff = deadline - now;
+    const card = document.getElementById('deadlineCard');
+    const cd = document.getElementById('countdown');
+
+    if (diff < 0) {
+      card.classList.add('passed');
+      cd.textContent = '⚠ Deadline passed — verify recertification was completed';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+    if (days > 0) {
+      cd.textContent = `${days} days, ${hours} hours remaining`;
+    } else {
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      cd.textContent = `${hours}h ${mins}m remaining`;
+    }
+  }
+
+  // ====== RESET ======
+  function resetAll() {
+    if (!confirm('Reset all progress, checkmarks, and notes? This cannot be undone.')) return;
+    state = {
+      count: 37,
+      phasesComplete: {},
+      stepsChecked: {},
+      checklistItems: {},
+      notes: ''
+    };
+    saveState(state);
+    location.reload();
+  }
+
+  // ====== INIT ======
+  document.addEventListener('DOMContentLoaded', () => {
+    updateProgress();
+    applyPhaseStates();
+    setupStepClicks();
+    setupChecklistClicks();
+    setupNotes();
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+  });
+
+  // Run immediately if DOM already parsed
+  if (document.readyState !== 'loading') {
+    updateProgress();
+    applyPhaseStates();
+    setupStepClicks();
+    setupChecklistClicks();
+    setupNotes();
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+  }
+</script>
+
+</body>
+</html>
